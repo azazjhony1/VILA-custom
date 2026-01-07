@@ -28,9 +28,10 @@ class SiglipVisionTower(VisionTower):
         # TODO(ligengl): why pass config here leading to errors?
         self.vision_tower = SiglipVisionModel.from_pretrained(
             model_name_or_path,
-            attn_implementation="flash_attention_2",
-            torch_dtype=eval(config.model_dtype),
+            attn_implementation="eager",
+            torch_dtype=torch.float32,
         )
+
         self.image_processor = SiglipImageProcessor.from_pretrained(model_name_or_path)
         self.is_loaded = True
 
@@ -40,9 +41,10 @@ class SiglipVisionTowerS2(VisionTowerS2):
         super().__init__(model_name_or_path, config)
         self.vision_tower = SiglipVisionModel.from_pretrained(
             model_name_or_path,
-            attn_implementation="flash_attention_2",
-            torch_dtype=eval(config.model_dtype),
+            attn_implementation="eager",
+            torch_dtype=torch.float32,
         )
+
         self.image_processor = SiglipImageProcessor.from_pretrained(model_name_or_path)
         # Make sure it crops/resizes the image to the largest scale in self.scales to maintain high-res information
         self.image_processor.size["height"] = self.image_processor.size["width"] = self.scales[-1]
@@ -54,9 +56,10 @@ class SiglipVisionTowerDynamicS2(VisionTowerDynamicS2):
         super().__init__(model_name_or_path, config)
         self.vision_tower = SiglipVisionModel.from_pretrained(
             model_name_or_path,
-            attn_implementation="flash_attention_2",
-            torch_dtype=eval(config.model_dtype),
+            attn_implementation="eager",
+            torch_dtype=torch.float32,
         )
+
         self.image_processor = SiglipImageProcessor.from_pretrained(model_name_or_path)
         # Make sure it crops/resizes the image to the largest scale in self.scales to maintain high-res information
         self.image_processor.size["height"] = self.image_processor.size["width"] = self.scales[0]

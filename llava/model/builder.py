@@ -141,10 +141,15 @@ def load_pretrained_model(
         vision_tower = model.get_vision_tower()
         if vision_tower is None:
             raise ValueError("Vision tower failed to load!")
-        vision_tower.to(device=device, dtype=torch.float16)
-        # vision_tower.to(device=device, dtype=torch.bfloat16)
-        mm_projector = model.get_mm_projector()
-        mm_projector.to(device=device, dtype=torch.float16)
+        if str(device) == 'cpu':
+            vision_tower.to(device=device, dtype=torch.float32)
+            mm_projector = model.get_mm_projector()
+            mm_projector.to(device=device, dtype=torch.float32)
+        else:
+            vision_tower.to(device=device, dtype=torch.float16)
+            mm_projector = model.get_mm_projector()
+            mm_projector.to(device=device, dtype=torch.float16)
+
         # mm_projector.to(device=device, dtype=torch.bfloat16)
         image_processor = vision_tower.image_processor
 
